@@ -1,6 +1,6 @@
-# test
+# Vue-Apollo-GrahQL Starter
 
-> A Vue.js project
+> Boilerplate for starting a project
 
 ## Build Setup
 
@@ -8,8 +8,11 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# serve client side with hot reload at localhost:8080
 npm run dev
+
+# start server on localhost:5000, NOTE: you need to restart the server anytime you make changes to the server files
+node server
 
 # build for production with minification
 npm run build
