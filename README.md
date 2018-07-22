@@ -19,7 +19,9 @@ npm run build
 ```
 
 For detailed explanation on how things work, consult the docs for 
-- [vue-loader](http://vuejs.github.io/vue-loader)
-- [jest](https://jestjs.io/en/)
+- [Vue-loader](http://vuejs.github.io/vue-loader)
+- [GraphQL](https://graphql.org/learn/)
+- [Apollo](https://www.apollographql.com/)
+- [Jest](https://jestjs.io/en/)
 - [Setting up SFCs](https://vuejs.org/v2/guide/single-file-components.html)
 - [Testing SFCs in Vue with Jest](https://vue-test-utils.vuejs.org/guides/testing-SFCs-with-jest.html)
