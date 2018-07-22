@@ -3,14 +3,15 @@ import App from './App.vue'
 import store from './store/store'
 import router from './router'
 
-
+// Apollo client side, to be attached to the vue objects to expose apollo methods globally
 import apollo from './apolloClient'
 
-
+// Components
 import HelloWorld from './components/HelloWorld.vue'
 import LanguageContainer from './components/LanguageContainer.vue'
 
-import 'es6-promise/auto' //needed for Vuex in browsers that do not natively support promises
+//needed for Vuex in browsers that do not natively support promises
+import 'es6-promise/auto'
 
 
 Vue.config.productionTip = false

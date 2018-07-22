@@ -4,7 +4,7 @@
 		<router-link
 			v-for="id in $store.state.languages.languageIds"
 			:key="id"
-			:to="id"
+			:to="`${id}`"
 		>
 			{{ $store.state.languages.languages[id].name }}
 		</router-link>
