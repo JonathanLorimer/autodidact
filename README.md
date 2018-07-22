@@ -16,6 +16,9 @@ node server
 
 # build for production with minification
 npm run build
+
+# run testing suite
+npm run test
 ```
 
 For detailed explanation on how things work, consult the docs for 
