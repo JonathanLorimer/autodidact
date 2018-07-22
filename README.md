@@ -19,7 +19,7 @@ npm run build
 ```
 
 For detailed explanation on how things work, consult the docs for 
--[vue-loader](http://vuejs.github.io/vue-loader)
--[jest](https://jestjs.io/en/)
--[Setting up SFCs](https://vuejs.org/v2/guide/single-file-components.html)
--[Testing SFCs in Vue with Jest](https://vue-test-utils.vuejs.org/guides/testing-SFCs-with-jest.html)
+- [vue-loader](http://vuejs.github.io/vue-loader)
+- [jest](https://jestjs.io/en/)
+- [Setting up SFCs](https://vuejs.org/v2/guide/single-file-components.html)
+- [Testing SFCs in Vue with Jest](https://vue-test-utils.vuejs.org/guides/testing-SFCs-with-jest.html)
