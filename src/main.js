@@ -7,8 +7,12 @@ import router from './router'
 import apollo from './apolloClient'
 
 // Components
-import HelloWorld from './components/HelloWorld.vue'
-import LanguageContainer from './components/LanguageContainer.vue'
+import LandingPage from './components/LandingPage.vue'
+import HeaderNav from './components/HeaderNav.vue'
+import Login from './components/Login.vue'
+import Create from './components/Create.vue'
+import ViewProj from './components/ViewProj.vue'
+
 
 //needed for Vuex in browsers that do not natively support promises
 import 'es6-promise/auto'
@@ -17,8 +21,11 @@ import 'es6-promise/auto'
 Vue.config.productionTip = false
 Vue.prototype.$apollo = apollo
 
-Vue.component('hello-world', HelloWorld)
-Vue.component('language-container', LanguageContainer)
+Vue.component('landing-page', LandingPage)
+Vue.component('header-nav', HeaderNav)
+Vue.component('login', Login)
+Vue.component('create', Create)
+Vue.component('view-proj', ViewProj)
 
 new Vue({
   el: '#app',

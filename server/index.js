@@ -4,45 +4,58 @@ const bodyParser = require('body-parser')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 const { makeExecutableSchema } = require('graphql-tools')
 
-// const delay = () => new Promise(res => {
-// 	console.log('delay has been called')
-// 	setTimeout(() => {
-// 		res(true)
-// 	}, 1000)
-// })
 
-// const delay = () => new Promise(res => {
-// 	setTimeout(() => {
-// 		res(true)
-// 	}, 1000)
-// })
+// // Connect to MongoDB
+// const MongoClient = require('mongodb').MongoClient
+//   , assert = require('assert');
+
+// // Connection URL
+// var url = 'mongodb://localhost:27017/autodidact';
+
+// // Use connect method to connect to the server
+// MongoClient.connect(url, function(err, db) {
+//   assert.equal(null, err);
+//   console.log("Connected successfully to server");
+
+//   db.close();
+// });
+
 
 // the mock data and classes
-const { Language, Framework, languages, frameworks } = require('./database')
+const { insertUser, getUserByEmail, getUserById } = require('./database')
 
 
 const typeDefs = `
 	type Query {
-		languages: [Language]
-		getLanguage(id: ID!): Language
+		registerUser(email: String!, password: String!): Login
+		loginUser(email: String!, password: String!): Login
+		loginUserById(id: String!): Login
 	}
-	type Language {
-		id: ID!
-		name: String!
-		frameworks: [Framework]
+	type Login {
+		status: SuccessMessage!
+		email: String!
+		uuid: String!
 	}
-	type Framework {
-		id: ID!
-		name: String
+	type SuccessMessage {
+		success: Boolean!
+		message: String!
 	}
 `
 
 const resolvers = {
 	Query: {
-		languages: () => languages,
-		getLanguage: (_, { id }) => {
-			return languages.find(x => x.id === parseInt(id))
-		}
+		registerUser: (_, { email, password }) => {
+			let user = {email, password}
+			return insertUser(user).then(result => result)
+		},
+		loginUser: (_, { email, password }) => {
+			let user = {email, password}
+			return getUserByEmail(user).then(result => result)
+		},
+		loginUserById: (_, { id }) => {
+			console.log(JSON.stringify(id))
+			return getUserById(id).then(result => result)
+		},
 	}
 }
 

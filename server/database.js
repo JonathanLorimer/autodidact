@@ -1,46 +1,83 @@
-class Language {
-	constructor(id, name, frameworksById) {
-		this.id = id
-		this.name = name
-		this.frameworksById = frameworksById
-	}
-	frameworks() {
-		return this.frameworksById.map(id => frameworks.find(y => y.id === id))
-	}
-}
-  
+const uuid = require('uuid/v4')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
-class Framework {
-	constructor(id, name) {
-		this.id = id
-		this.name = name
-	}
-}
-  
-  
-const frameworks = [
-	new Framework(1, 'Vue'),
-	new Framework(2, 'React'),
-	new Framework(3, 'Ember'),
-	new Framework(4, 'Angular'),
-	new Framework(5, 'Preact'),
-	new Framework(6, 'Rails'),
-	new Framework(7, 'Phoenix'),
-	new Framework(8, 'Laravel'),
-]
-  
+// Connect to MongoDB
+const MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
 
-const languages = [
-	new Language(1, 'JavaScript', [1, 2, 3, 4, 5]),
-	new Language(2, 'Ruby', [6]),
-	new Language(3, 'Elixir', [7]),
-	new Language(4, 'PHP', [8]),
-]
+// Connection URL
+var url = 'mongodb://localhost:27017/test';
+
+// Use connect method to connect to the server
+const insertUser = (user) => {
+	user._id = uuid()
+	return MongoClient
+		.connect(url)
+		.then((db) => bcrypt.hash(user.password, saltRounds).then(hash => {
+			user.password = hash
+			return db.collection('user-data').insertOne(user)
+				.then(result => {
+					console.log(result)
+					db.close()
+					return {status: {success: true, message: 'User succesfully registered' }, email: user.email, uuid: user._id}
+				})
+				.catch(err => { return {
+						status: {success: true, message: `User unsuccesfully registered: ${err}` }, 
+						email: user.email, 
+						uuid: user._id
+					} 
+				})
+			})
+		)
+		.catch((err) => { console.log(err) })
+}
+
+const getUserByEmail = (user) => {
+	return MongoClient
+		.connect(url)
+		.then(db => db.collection('user-data').findOne({email: user.email})
+				.then(res => { db.close(); console.log(res); return res;})
+				.then(res => bcrypt.compare(user.password, res.password)
+					.then(v => v ? {status: {success: true, message: 'User succesfully logged in' }, email: res.email, uuid: res._id} : reject('Password does not match'))
+					.catch(err => err)
+				)
+				.catch(err => { return {
+						status: {success: false, message: `User unsuccesfully registered: ${err}` }, 
+						email: '', 
+						uuid: ''
+					}
+				})
+
+		)
+		.catch(err => { console.log(err); return err })
+}
+
+const getUserById = (userId) => {
+	return MongoClient
+		.connect(url)
+		.then(db => {
+			console.log(userId)
+			return db.collection('user-data').findOne({_id: userId})
+				.then(res => { 
+					db.close() 
+					console.log(res)
+					return {status: {success: true, message: 'User succesfully logged in' }, email: res.email, uuid: res._id}
+				})
+				.catch(err => { return {
+						status: {success: false, message: `User unsuccesfully registered: ${err}` }, 
+						email: '', 
+						uuid: ''
+					}
+				})
+
+		})
+		.catch(err => { console.log(err); return err })
+}
   
 
 module.exports = {
-	Language,
-	Framework,
-	languages,
-	frameworks,
+	insertUser,
+	getUserByEmail,
+	getUserById
 }
