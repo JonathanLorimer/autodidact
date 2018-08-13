@@ -2,40 +2,17 @@ import gql from 'graphql-tag'
 import apollo from '../../apolloClient'
 
 const state = {
-	currentUser: ''
+	currentUser: '',
+	loginSwitch: false
 }
 
 const mutations = {
 	SET_USER (state, { email }) {
-		console.log(`setting current user to ${email}`)
 		state.currentUser = email
+	},
+	SET_LOGIN_SWITCH (state) {
+		state.loginSwitch = !state.loginSwitch
 	}
-// 	SET_LANGUAGES (state, { languages }) {
-// 		const ids = languages.map(x => x.id)
-
-// 		for (let id in ids) {
-// 			if (!state.languageIds.includes(ids[id])) {
-// 			state.languageIds.push(ids[id])
-// 			}
-// 		}
-
-// 		for (let l in languages) {
-// 			const language = languages[l]
-// 			state.languages = {
-// 				...state.languages, 
-// 				[language.id]: {
-// 					...state.languages[language.id], 
-// 					...language
-// 				},
-// 			}
-// 		}
-// 	},
-// 	UPDATE_LANGUAGE(state, { id, data }) {
-// 		if (!state.languageIds.includes(id)) {
-// 			state.languageIds.push(id)
-// 		}
-// 		state.languages = {...state.languages, [id]: {...data}}
-// 	}
 }
 
 const actions = {
@@ -58,8 +35,8 @@ const actions = {
 		}
 
 		const response = apollo.query({ query, variables })
-			.then( res => { 
-				commit('SET_USER', { email })
+			.then( res => {
+				if ( res.data.registerUser.status.success ) commit('SET_USER', { email })
 				return res.data.registerUser 
 			})
 			.catch( err => console.log(err) )
@@ -86,7 +63,7 @@ const actions = {
 
 		const response = apollo.query({ query, variables })
 			.then( res => {
-				commit('SET_USER', { email })
+				if ( res.data.loginUser.status.success ) commit('SET_USER', { email })
 				return res.data.loginUser
 			})
 			.catch( err => console.log(err) )
@@ -110,8 +87,7 @@ const actions = {
 		const response = apollo.query({ query, variables })
 			.then( res => {
 				let email = res.data.loginUserById.email
-				console.log(`res: ${JSON.stringify(res)}`)
-				commit('SET_USER', { email })
+				if ( res.data.loginUserById.status.success ) commit('SET_USER', { email })
 				return res.data.loginUserById
 			})
 			.catch( err => console.log(err) )
@@ -137,37 +113,10 @@ const actions = {
 	},
 	delCookie({ commit }, name){
 		document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+	},
+	flipLoginSwitch({ commit }){
+		commit('SET_LOGIN_SWITCH')
 	}
-	
-	// getLanguage({ commit }, id) {
-	// 	console.time(`getLangById ${id}`)
-
-	// 	const query = gql`
-	// 		query GetLanguage($id: ID!) {
-	// 			getLanguage(id: $id) {
-	// 				id
-	// 				name
-	// 				frameworks {
-	// 					name
-	// 				}
-	// 			}
-	// 		}`
-		
-	// 	const variables = {
-	// 		id: id
-	// 	}
-
-	// 	const response = apollo.query({
-	// 		query, variables
-	// 	})
-	// 	.then((res) => {
-	// 		commit('UPDATE_LANGUAGE', { id, data: res.data.getLanguage })
-			
-	// 		console.log(res.data.getLanguage)
-	// 		console.timeEnd(`getLangById ${id}`)
-	// 	})
-
-	// }
 }
 
 export default {

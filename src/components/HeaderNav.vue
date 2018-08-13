@@ -5,7 +5,8 @@
 				<ul class="navigation__list">
 					<li class="navigation__item"><router-link class="link" :to="'create'">Create</router-link></li>
 					<li class="navigation__item"><router-link class="link" :to="'view-proj'">View Projects</router-link></li>
-					<li class="navigation__item"><router-link class="link" :to="'login'">Login/Register</router-link></li>
+					<li class="navigation__item" v-if="!currentUser"><a class="link" @click="flipLoginSwitch"> Login/Register </a></li>
+					<li class="navigation__item" v-else><a class="link"> {{ currentUser }} </a><a class="link" @click="logout"> Logout </a> </li>
 				</ul>
 			</nav>
 		</div>
@@ -18,6 +19,20 @@
 			},
 			data () {
 				return {
+				}
+			},
+			computed: {
+				currentUser(){
+					return this.$store.state.users.currentUser
+				}
+			},
+			methods: {
+				flipLoginSwitch(){
+					this.$store.dispatch('flipLoginSwitch')
+				},
+				logout(){
+					this.$store.dispatch('logout')
+					this.$store.dispatch('delCookie', 'userCookie')
 				}
 			}
 		}
@@ -36,7 +51,7 @@
 		}
 		
 		.navigation {
-			background-color: green;
+			background-color: #3c4859;
 			height: 8rem;
 			position: fixed;
 			top: 0;
@@ -44,6 +59,7 @@
 			width: 100%;
 			height: 8rem;
 			z-index: 1;
+			padding-left: 3rem;
 
 			&__nav  {
 				height: 100%;
@@ -53,7 +69,7 @@
 			}
 
 			&__logo {
-
+				font-size: 2.4rem;
 			}
 
 			&__list {

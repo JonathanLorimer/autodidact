@@ -11,6 +11,7 @@ import LandingPage from './components/LandingPage.vue'
 import HeaderNav from './components/HeaderNav.vue'
 import Login from './components/Login.vue'
 import Create from './components/Create.vue'
+import CreateForm from './components/CreateForm.vue'
 import ViewProj from './components/ViewProj.vue'
 
 
@@ -25,6 +26,7 @@ Vue.component('landing-page', LandingPage)
 Vue.component('header-nav', HeaderNav)
 Vue.component('login', Login)
 Vue.component('create', Create)
+Vue.component('create-form', CreateForm)
 Vue.component('view-proj', ViewProj)
 
 new Vue({

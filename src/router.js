@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Create from './components/Create.vue'
-import Login from './components/Login.vue'
 import ViewProj from './components/ViewProj.vue'
 import LandingPage from './components/LandingPage.vue'
 
@@ -22,11 +21,6 @@ const routes = [
       // name: 'view',
       path: '/view-proj',
       component: ViewProj,
-    },
-    {
-      // name: 'login',
-      path: '/login',
-      component: Login,
     }
   ]
   

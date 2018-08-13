@@ -3,22 +3,37 @@
 		<header-nav></header-nav>
 		<div class="spacer"></div>
 		<router-view></router-view>
+		<login id="login" v-if="loginSwitch"></login>
 	</div>
 </template>
-
 <script>
 export default {
 	name: 'app',
 	created(){
-		console.log('created')
-		// this.$store.dispatch('getLanguages').then(()=>{
-		// 	console.log('finished updating state')
-		// })
+		this.$store.dispatch('getCookie', 'userCookie')
+			.then( res => {
+				console.log(res)
+				console.log(this.$store.state.users.currentUser)
+				if (res && !this.$store.state.users.currentUser) {
+					console.log('loging him in')
+					this.$store.dispatch('loginUserById', res)
+				}
+			})
 	},
 	data () {
 		return {
 		}
 	},
+	computed:{
+		loginSwitch(){
+			return this.$store.state.users.loginSwitch
+		}
+	},
+	methods: {
+		flipLoginSwitch(){
+			this.$store.dispatch('flipLoginSwitch')
+		}
+	}
 }
 </script>
 <style lang="scss">
@@ -31,5 +46,17 @@ export default {
 	.spacer {
 		height: 8rem;
 	}
+	position: relative;
 }
+
+#login {
+	position: fixed;
+	background-color: rgba(#2c3e50, .6);
+	height: 100vh;
+	width: 100vw;
+	padding: 4rem;
+	top: 0;
+	left: 0;
+}
+
 </style>
