@@ -12,6 +12,11 @@
 				v-if="createFormSwitch"
 				@click.native="flipCreateSwitch"
 				v-on:flipCreateSwitch="flipCreateSwitch"></create-form>
+			<edit-form 
+				id="edit-form" 
+				v-if="editSwitch"
+				@click.native="flipEditSwitch"
+				v-on:flipEditSwitch="flipEditSwitch"></edit-form>
 			<div class="button-container">
 				<button class="add-material btn" @click="flipCreateSwitch">
 					+ Add Learning Material
@@ -39,14 +44,20 @@
 				},
 				learningMaterials(){
 					return this.$store.state.learningPath.learningMaterials
+				},
+				editSwitch(){
+					return this.$store.state.learningPath.editSwitch
 				}
 			},
 			mounted(){
-				
+
 			},
 			methods: {
 				flipCreateSwitch(){
 					this.createFormSwitch = !this.createFormSwitch
+				},
+				flipEditSwitch(){
+					this.$store.dispatch('flipEditSwitch')
 				},
 				traversePreReqs(obj, acc = []){
 					acc.unshift(obj)
@@ -57,7 +68,8 @@
 		}
 	</script>
 	<style lang="scss" scoped>
-		#create-form {
+		#create-form,
+		#edit-form {
 			position: fixed;
 			background-color: rgba(#2c3e50, .6);
 			height: 100vh;

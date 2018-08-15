@@ -3,7 +3,9 @@ import apollo from '../../apolloClient'
 
 const state = {
 	learningPath: {id: 'root', nodes:[]},
-	learningMaterials: {}
+	learningMaterials: {},
+	editSwitch: false,
+	editing: {}
 }
 
 const mutations = {
@@ -37,6 +39,12 @@ const mutations = {
 	SET_STATE(state, { materials, path }){
 		state.learningMaterials = materials
 		state.learningPath = path
+	},
+	SET_EDIT_SWITCH(state){
+		state.editSwitch = !state.editSwitch
+	},
+	SET_EDITED(state, { id }){
+		state.editing = state.learningMaterials[id]
 	}
 
 }
@@ -54,20 +62,10 @@ const actions = {
 	setStateFromCookie({ commit }, value){
 		commit('SET_STATE', JSON.parse(value))
 	},
-	// setCookie({ commit }, cookieDetails){
-	// 	let { name, value, days } = cookieDetails
-	// 	let expires = ""
-	// 	if (days) {
-	// 		let date = new Date()
-	// 		date.setTime(date.getTime() + (days*24*60*60*1000))
-	// 		expires = "; expires=" + date.toUTCString()
-	// 	}
-	// 	document.cookie = name + "=" + (value || "")  + expires + "; path=/"
-	// },
-	// getCookie({ commit }, name){
-	// 	let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
-  	// 	return match ? match[2] : false
-	// }
+	flipEditSwitch({ commit }, id = false){
+		commit('SET_EDIT_SWITCH')
+		if (id) commit('SET_EDITED', { id })
+	}
 }
 
 export default {

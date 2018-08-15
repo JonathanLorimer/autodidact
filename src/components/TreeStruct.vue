@@ -1,9 +1,12 @@
 <template>
   <div class="tree-struct">
-	<tr class="tree-struct__row" :style="indent" v-if="learningMaterials[id]">
-		<td class="tree-struct__block tree-struct__name"><a :href="learningMaterials[id].link" class="tree-struct__link">{{ learningMaterials[id].name }}</a></td>
-		<td class="tree-struct__block tree-struct__type">{{ learningMaterials[id].type }}</td>
-	</tr>
+	<div class="tree-struct__container" v-if="learningMaterials[id]">
+		<tr class="tree-struct__row" :style="indent">
+			<td class="tree-struct__block tree-struct__name"><a :href="learningMaterials[id].link" class="tree-struct__link">{{ learningMaterials[id].name }}</a></td>
+			<td class="tree-struct__block tree-struct__type">{{ learningMaterials[id].type }}</td>
+		</tr>
+		<div class="tree-struct__edit"><a class="tree-struct__edit--link" @click="flipEditSwitch"><i class="far fa-edit"></i></a></div>
+	</div>
     <tree-struct
       v-for="node in nodes"
 	  :key ="node.id"
@@ -26,13 +29,46 @@
 			return this.$store.state.learningPath.learningMaterials
 		},
 		indent() {
-        	return { transform: `translate(${this.depth * 2}rem)` }
+        	return { marginLeft: `${this.depth * 2}rem` }
       	}
+	},
+	methods: {
+		flipEditSwitch(){
+			console.log(this.id)
+			this.$store.dispatch('flipEditSwitch', this.id)
+		}
 	}
   }
 </script>
 <style lang="scss" scoped>
 	.tree-struct {
+		&__container {
+			display: flex;
+		}
+		&__edit{
+			background-color: #fff;
+			height: 3.6rem;
+			border-radius: 3px;
+			width: 3.6rem;
+			margin-left: .5rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			&--link{
+				height: 2rem;
+				margin-bottom: .4rem;
+				margin-left: .4rem;
+				cursor: pointer;
+			}
+			.fa-edit,
+			.fa-edit:link,
+			.fa-edit:active,
+			.fa-edit:visited {
+				outline: none;
+				color: #2c3e50;
+				font-size: 2rem;
+			}
+		}
 		&__row {
 			// background-color: #e8edeb;
 			background-color: #fff;

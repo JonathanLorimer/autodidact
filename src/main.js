@@ -12,6 +12,7 @@ import HeaderNav from './components/HeaderNav.vue'
 import Login from './components/Login.vue'
 import Create from './components/Create.vue'
 import CreateForm from './components/CreateForm.vue'
+import EditForm from './components/EditForm.vue'
 import ViewProj from './components/ViewProj.vue'
 import TreeStruct from './components/TreeStruct.vue'
 
@@ -28,6 +29,7 @@ Vue.component('header-nav', HeaderNav)
 Vue.component('login', Login)
 Vue.component('create', Create)
 Vue.component('create-form', CreateForm)
+Vue.component('edit-form', EditForm)
 Vue.component('view-proj', ViewProj)
 Vue.component('tree-struct', TreeStruct)
 
