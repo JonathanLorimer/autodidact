@@ -12,11 +12,14 @@ export default {
 	created(){
 		this.$store.dispatch('getCookie', 'userCookie')
 			.then( res => {
-				console.log(res)
-				console.log(this.$store.state.users.currentUser)
 				if (res && !this.$store.state.users.currentUser) {
-					console.log('loging him in')
 					this.$store.dispatch('loginUserById', res)
+				}
+			})
+		this.$store.dispatch('getCookie', 'materialCookie')
+			.then( res => {
+				if (res) {
+					this.$store.dispatch('setStateFromCookie', res)
 				}
 			})
 	},

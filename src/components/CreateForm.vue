@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="container" @click.stop="">
+		<div class="container" @click.stop="doNothing">
 			<form action="" class="learning-material" @submit.prevent="submitLearningMaterial">
 				<div class="learning-material__name-container">
 					<input
@@ -130,7 +130,8 @@
 			addPreReq(event, item){
 				this.learningMaterial.preReq = item
 				this.flipDropdownSwitch()
-			}
+			},
+			doNothing(){}
 		}
 	}
 </script>
@@ -162,7 +163,7 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		height: 50rem;
-		width: 40rem;
+		width: 46rem;
 		border-radius: 3px;
 		padding: 4rem 4rem 10rem;
 		box-shadow: 1rem 1.5rem 2rem rgba(44, 62, 80, 0.3);
@@ -241,9 +242,10 @@
 			&__pre-req:focus {
 				border: none;
 				outline: none;
-				width: 22.5rem;
+				width: 30rem;
 				height: 3rem;
 				padding-left: 1rem;
+				font-size: 1.5rem;
 			}
 
 			&__submit {
@@ -262,7 +264,7 @@
 				}
 				.menu-indicator {
 					position: absolute;
-					left: 19.5rem;
+					left: 27rem;
 					top: 1.5rem;
 					height: 2px;
 					width: 1.8rem;
@@ -327,7 +329,7 @@
 				&--dropdown-container {
 					position: absolute;
 					background-color: #fff;
-					left: 35rem;
+					left: 40rem;
 					top: -26.3rem;
 					height: 50rem;
 					&::after {
@@ -337,7 +339,7 @@
 						transform: rotate(45deg);
 						position: absolute;
 						background-color: #fff;
-						top: 23rem;
+						top: 22.8rem;
 						left: -5rem;
 						z-index: -1;
 					}

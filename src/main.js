@@ -13,6 +13,7 @@ import Login from './components/Login.vue'
 import Create from './components/Create.vue'
 import CreateForm from './components/CreateForm.vue'
 import ViewProj from './components/ViewProj.vue'
+import TreeStruct from './components/TreeStruct.vue'
 
 
 //needed for Vuex in browsers that do not natively support promises
@@ -28,6 +29,7 @@ Vue.component('login', Login)
 Vue.component('create', Create)
 Vue.component('create-form', CreateForm)
 Vue.component('view-proj', ViewProj)
+Vue.component('tree-struct', TreeStruct)
 
 new Vue({
   el: '#app',

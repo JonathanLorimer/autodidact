@@ -1,6 +1,6 @@
 	<template>
 		<div @click="flipLoginSwitch">
-			<div class="container" @click.stop="">
+			<div class="container" @click.stop="doNothing">
 				<div class="error_message" v-show="err"> {{ err }} </div>
 				<form action="" class="login" v-if="formSwitch" @submit.prevent="submitLogin">
 					<div class="login__email-container">
@@ -144,7 +144,8 @@
 				},
 				flipLoginSwitch(){
 					this.$store.dispatch('flipLoginSwitch')
-				}
+				},
+				doNothing(){}
 			}
 		}
 	</script>

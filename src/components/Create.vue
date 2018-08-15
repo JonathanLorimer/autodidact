@@ -1,30 +1,25 @@
 	<template>
 		<div class="container">
-			<button class="add-material btn" @click="flipCreateSwitch">
-				+ Add Learning Material
-			</button>
-			<!-- <ul class="learning-path">
-				<li 
-				class="learning-path__learning-material"
-				v-for="material in learningPath" :key="material.id">
-					<tr class="learning-path__row" v-for="preReq in material" :key="preReq.name">
-						<td class="learning-path__name"> {{ preReq.name }} </td>
-						<td class="learning-path__type"> {{ preReq.type }} </td>
-						<td class="learning-path__link"> {{ preReq.link }}</td>
-						<td class="learning-path__pre-req"> {{ preReq.preReq.name}}</td>
-					</tr>
-				</li>
-			</ul> -->
-			<div>{{ learningPath }}</div>
-			<div>{{ learningMaterials }}</div>
+			<tree-struct
+				class="root"
+				:id="learningPath.id"
+				:nodes="learningPath.nodes"
+				:depth="0"
+			>
+			</tree-struct>
 			<create-form 
 				id="create-form" 
 				v-if="createFormSwitch"
 				@click.native="flipCreateSwitch"
 				v-on:flipCreateSwitch="flipCreateSwitch"></create-form>
-			<button class="save-learning-path btn">
-				Save Learning Path
-			</button>
+			<div class="button-container">
+				<button class="add-material btn" @click="flipCreateSwitch">
+					+ Add Learning Material
+				</button>
+				<button class="save-learning-path btn">
+					Save Learning Path
+				</button>
+			</div>
 		</div>
 	</template>
 
@@ -47,6 +42,7 @@
 				}
 			},
 			mounted(){
+				
 			},
 			methods: {
 				flipCreateSwitch(){
@@ -71,12 +67,24 @@
 			left: 0;
 		}
 
+		.root{
+			background-color: #b7cec2;
+			width: 80vw;
+			min-height: 60vh;
+			margin-top: 8rem;
+			padding: 2rem 3rem 2rem 2rem;
+			border-radius: .5rem;
+			box-shadow: 0.5rem 1rem 3rem rgba(44, 62, 80, 0.1);
+			display: flex;
+			justify-content: center;
+		}
+
 		.btn {
 			&:focus{
 			outline: none;
 			}
 			border: none;
-			box-shadow: none;
+			box-shadow: 2px 5px 1rem rgba(44, 62, 80, 0.25);;
 			border-radius: 50rem;
 			font-size: 1.6rem;
 			margin-top: 1rem;
@@ -85,20 +93,26 @@
 
 			&:hover{
 				transform: scale(1.2);
+				box-shadow: 3px 7px 3rem rgba(44, 62, 80, 0.15);
 			}
 
 			&:active{
-				transform: scale(1)
+				transform: scale(1);
+				box-shadow: 2px 5px 1rem rgba(44, 62, 80, 0.25);
 			}
 		}
-
-		.add-material,
-		.save-learning-path {
-			background-color: #f37b56;
-			color: #fff;
-			height: 6rem;
-			width: 24rem;
-			margin-top: 16rem;
+		.button-container{
+			display: flex;
+			justify-content: space-evenly;
+			width: 40vw;
+			padding: 4rem;
+			.add-material,
+			.save-learning-path {
+				background-color: #f37b56;
+				color: #fff;
+				height: 6rem;
+				width: 24rem;
+			}
 		}
 
 		.container {
