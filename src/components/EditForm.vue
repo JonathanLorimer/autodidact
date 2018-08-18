@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="container" @click.stop="doNothing">
-			<form action="" class="learning-material" @submit.prevent="submitLearningMaterial">
+			<form action="" class="learning-material" @submit.prevent="submitEdit">
 				<div class="learning-material__name-container">
 					<input
 						type="text" 
@@ -58,11 +58,14 @@
 								v-for="item in learningMaterials" 
 								:key="item.id" 
 								@click="addPreReq($event, item)"> {{ item.name }} </li>
+							<li class="learning-material__pre-req-container--item" @click="addPreReq($event, false)">Remove</li>
 						</ul>
 					</div>
 				</div>
-				<button class="learning-material__submit btn" type="submit"> Submit </button>
-				<a class="learning-material__delete btn" @click.prevent="deleteMaterial"> Delete </a>
+				<div class="learning-material__button-container">
+					<button class="learning-material__submit btn" type="submit"> Submit </button>
+					<a class="learning-material__delete btn" @click.prevent="deleteMaterial"> Delete </a>
+				</div>
 				<div class="err">{{this.err}}</div>
 			</form>
 		</div>
@@ -71,7 +74,7 @@
 
 <script>
 	export default {
-		name: 'create-form',
+		name: 'edit-form',
 		props: {
 		},
 		data () {
@@ -92,11 +95,15 @@
 				return this.$store.state.learningPath.learningPath
 			},
 			learningMaterials(){
-				return Object.values(this.$store.state.learningPath.learningMaterials)
+				return Object.values(this.$store.state.learningPath.learningMaterials).filter(e => e.id !== this.learningMaterial.id)
 			}
 		},
 		mounted(){
-			this.learningMaterial = this.$store.state.learningPath.editing
+			this.learningMaterial.id = this.$store.state.learningPath.editing.id
+			this.learningMaterial.name = this.$store.state.learningPath.editing.name
+			this.learningMaterial.type = this.$store.state.learningPath.editing.type
+			this.learningMaterial.link = this.$store.state.learningPath.editing.link
+			this.learningMaterial.preReq = this.$store.state.learningPath.editing.preReq
 		},
 		methods: {
 			clearErr(){
@@ -106,28 +113,28 @@
 				if(this.learningMaterials.length > 0) this.dropdownSwitch = !this.dropdownSwitch;
 				else this.err = 'No learning materials to add as pre-requisite'
 			},
-			// submitLearningMaterial(){
-			// 	// Trim white space from string entries
-			// 	this.learningMaterial.name = this.learningMaterial.name.trim()
-			// 	this.learningMaterial.type = this.learningMaterial.type.trim()
-			// 	this.learningMaterial.link = this.learningMaterial.link.trim()
+			submitEdit(){
+				// Trim white space from string entries
+				this.learningMaterial.name = this.learningMaterial.name.trim()
+				this.learningMaterial.type = this.learningMaterial.type.trim()
+				this.learningMaterial.link = this.learningMaterial.link.trim()
 
-			// 	// Validation
-			// 	if (!this.learningMaterial.name) this.err = 'Please name your learning material'
-			// 	if (!this.learningMaterial.type) this.err = 'Please categorize your learning material with a type'
+				// Validation
+				if (!this.learningMaterial.name) this.err = 'Please name your learning material'
+				if (!this.learningMaterial.type) this.err = 'Please categorize your learning material with a type'
 
-			// 	// Save the Material and flip the form switch
-			// 	if(this.learningMaterial.name && this.learningMaterial.type) {
-			// 		this.$store.dispatch('addMaterial', this.learningMaterial)
-			// 		this.$emit('flipEditSwitch')
-			// 		this.learningMaterial = {
-			// 			name: '',
-			// 			type: '',
-			// 			link: '',
-			// 			preReq: {},
-			// 		}
-			// 	}
-			// },
+				// Save the Material and flip the form switch
+				if(this.learningMaterial.name && this.learningMaterial.type) {
+					this.$store.dispatch('editMaterial', this.learningMaterial)
+					this.$emit('flipEditSwitch')
+					this.learningMaterial = {
+						name: '',
+						type: '',
+						link: '',
+						preReq: {},
+					}
+				}
+			},
 			addPreReq(event, item){
 				this.learningMaterial.preReq = item
 				this.flipDropdownSwitch()
@@ -256,6 +263,15 @@
 			&__submit {
 				height: 4rem;
 				width: 15rem;
+			}
+
+			&__delete {
+				margin-left: 4rem;
+			}
+
+			&__button-container {
+				display: flex;
+				align-items: center
 			}
 
 			&__pre-req-container {

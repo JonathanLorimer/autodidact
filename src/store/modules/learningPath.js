@@ -11,31 +11,7 @@ const state = {
 const mutations = {
 	ADD_MATERIAL (state, { material }) {
 		state.learningMaterials[material.id] = material
-		
 	},
-	// ADD_MATERIAL_TO_PATH (state, { material }){
-	// 	const traverse = (obj, acc = []) => {
-	// 		acc.unshift(obj)
-	// 		if (!obj.preReq.name) return acc
-	// 		else {
-	// 			return traverse(obj.preReq, acc)
-	// 		}
-	// 	}
-	// 	const insert = (state, array) => {
-	// 		let pointer = state
-	// 		array.forEach(x => {
-	// 			let n = pointer.nodes
-	// 			let elem = n.find(y => y.id === x)
-	// 			elem ? 
-	// 			pointer = n[n.indexOf(elem)] :
-	// 			n.push({ id: x, nodes: [] })
-	// 		})
-	// 		return state
-	// 	}
-	// 	const f = traverse(material).map(e => e.id)
-	
-	// 	state.learningPath = insert(state.learningPath, f)
-	// },
 	ADD_MATERIAL_TO_PATH (state, { preReq, id }){
 		if (preReq === 'root'){
 			state.learningPath.nodes.push({id, nodes: []})
@@ -55,6 +31,14 @@ const mutations = {
 		}
 	
 		state.learningPath = trav(state.learningPath, preReq, id)
+	},
+	UPDATE_MATERIAL(state, {material}){
+		state.learningMaterials[material.id] = material
+	},
+	UPDATE_LEARNING_PATH(state, {material}){
+		if (material.preReq.id !== state.learningMaterials[material.id].preReq.id){
+
+		}
 	},
 	SET_STATE(state, { materials, path }){
 		state.learningMaterials = materials
@@ -102,14 +86,21 @@ const actions = {
 		let preReq = material.preReq.id || 'root'
 		commit('ADD_MATERIAL_TO_PATH', { preReq, id  })
 		commit('ADD_MATERIAL', { material })
-		localStorage.setItem('learningPath', JSON.stringify(state.learningPath))
-		localStorage.setItem('learningMaterials', JSON.stringify(state.learningMaterials))
+		window.localStorage.setItem('learningPath', JSON.stringify(state.learningPath))
+		window.localStorage.setItem('learningMaterials', JSON.stringify(state.learningMaterials))
 	},
 	deleteMaterial({ commit }, id){
 		commit('REMOVE_MATERIAL', { id })
 		commit('REMOVE_FROM_LEARNING_PATH', { id })
 		window.localStorage.setItem('learningPath', JSON.stringify(state.learningPath))
 		window.localStorage.setItem('learningMaterials', JSON.stringify(state.learningMaterials))
+	},
+	editMaterial({commit}, material){
+		if (material.preReq.id !== state.learningMaterials[material.id].preReq.id){
+			commit('REMOVE_FROM_LEARNING_PATH', { id: material.id })
+			commit('ADD_MATERIAL_TO_PATH', { preReq: material.preReq.id || 'root', id: material.id  })
+		}
+		commit('UPDATE_MATERIAL', { material })
 	},
 	setStateFromLocalStorage({ commit }){
 		commit('SET_STATE', { materials: JSON.parse(localStorage.getItem('learningMaterials')), path: JSON.parse(localStorage.getItem('learningPath')) })
