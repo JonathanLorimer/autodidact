@@ -16,12 +16,7 @@ export default {
 					this.$store.dispatch('loginUserById', res)
 				}
 			})
-		this.$store.dispatch('getCookie', 'materialCookie')
-			.then( res => {
-				if (res) {
-					this.$store.dispatch('setStateFromCookie', res)
-				}
-			})
+		if(JSON.parse(localStorage.getItem('learningPath')) && JSON.parse(localStorage.getItem('learningMaterials'))) this.$store.dispatch('setStateFromLocalStorage')
 	},
 	data () {
 		return {

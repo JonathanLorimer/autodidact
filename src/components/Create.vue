@@ -80,6 +80,16 @@
 		}
 
 		.root{
+			// background-color: #b7cec2;
+			// width: 80vw;
+			// min-height: 60vh;
+			// margin-top: 8rem;
+			// padding: 2rem 3rem 2rem 2rem;
+			// border-radius: .5rem;
+			// box-shadow: 0.5rem 1rem 3rem rgba(44, 62, 80, 0.1);
+			// display: flex;
+			// justify-content: center;
+
 			background-color: #b7cec2;
 			width: 80vw;
 			min-height: 60vh;
@@ -88,7 +98,8 @@
 			border-radius: .5rem;
 			box-shadow: 0.5rem 1rem 3rem rgba(44, 62, 80, 0.1);
 			display: flex;
-			justify-content: center;
+			flex-direction: column;
+			align-items: baseline;
 		}
 
 		.btn {
@@ -116,7 +127,7 @@
 		.button-container{
 			display: flex;
 			justify-content: space-evenly;
-			width: 40vw;
+			width: 60vw;
 			padding: 4rem;
 			.add-material,
 			.save-learning-path {

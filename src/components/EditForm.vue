@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<button class="learning-material__submit btn" type="submit"> Submit </button>
-				<button class="learning-material__delete btn" @click="deleteMaterial"> Delete </button>
+				<a class="learning-material__delete btn" @click.prevent="deleteMaterial"> Delete </a>
 				<div class="err">{{this.err}}</div>
 			</form>
 		</div>
@@ -96,7 +96,6 @@
 			}
 		},
 		mounted(){
-			console.log(this.$store.state.learningPath.editing)
 			this.learningMaterial = this.$store.state.learningPath.editing
 		},
 		methods: {
@@ -107,36 +106,36 @@
 				if(this.learningMaterials.length > 0) this.dropdownSwitch = !this.dropdownSwitch;
 				else this.err = 'No learning materials to add as pre-requisite'
 			},
-			submitLearningMaterial(){
-				// Trim white space from string entries
-				this.learningMaterial.name = this.learningMaterial.name.trim()
-				this.learningMaterial.type = this.learningMaterial.type.trim()
-				this.learningMaterial.link = this.learningMaterial.link.trim()
-				this.learningMaterial.id = uuid()
+			// submitLearningMaterial(){
+			// 	// Trim white space from string entries
+			// 	this.learningMaterial.name = this.learningMaterial.name.trim()
+			// 	this.learningMaterial.type = this.learningMaterial.type.trim()
+			// 	this.learningMaterial.link = this.learningMaterial.link.trim()
 
-				// Validation
-				if (!this.learningMaterial.name) this.err = 'Please name your learning material'
-				if (!this.learningMaterial.type) this.err = 'Please categorize your learning material with a type'
+			// 	// Validation
+			// 	if (!this.learningMaterial.name) this.err = 'Please name your learning material'
+			// 	if (!this.learningMaterial.type) this.err = 'Please categorize your learning material with a type'
 
-				// Save the Material and flip the form switch
-				if(this.learningMaterial.name && this.learningMaterial.type) {
-					this.$store.dispatch('addMaterial', this.learningMaterial)
-					this.$emit('flipEditSwitch')
-					this.learningMaterial = {
-						name: '',
-						type: '',
-						link: '',
-						preReq: {},
-					}
-				}
-			},
+			// 	// Save the Material and flip the form switch
+			// 	if(this.learningMaterial.name && this.learningMaterial.type) {
+			// 		this.$store.dispatch('addMaterial', this.learningMaterial)
+			// 		this.$emit('flipEditSwitch')
+			// 		this.learningMaterial = {
+			// 			name: '',
+			// 			type: '',
+			// 			link: '',
+			// 			preReq: {},
+			// 		}
+			// 	}
+			// },
 			addPreReq(event, item){
 				this.learningMaterial.preReq = item
 				this.flipDropdownSwitch()
 			},
 			doNothing(){},
 			deleteMaterial(){
-
+				this.$store.dispatch('deleteMaterial', this.learningMaterial.id)
+				this.$emit('flipEditSwitch')
 			}
 		}
 	}

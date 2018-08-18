@@ -2,7 +2,7 @@
   <div class="tree-struct">
 	<div class="tree-struct__container" v-if="learningMaterials[id]">
 		<tr class="tree-struct__row" :style="indent">
-			<td class="tree-struct__block tree-struct__name"><a :href="learningMaterials[id].link" class="tree-struct__link">{{ learningMaterials[id].name }}</a></td>
+			<td class="tree-struct__block tree-struct__name"><a :href="learningMaterials[id].link" target="_blank" class="tree-struct__link">{{ learningMaterials[id].name }}</a></td>
 			<td class="tree-struct__block tree-struct__type">{{ learningMaterials[id].type }}</td>
 		</tr>
 		<div class="tree-struct__edit"><a class="tree-struct__edit--link" @click="flipEditSwitch"><i class="far fa-edit"></i></a></div>
@@ -29,12 +29,11 @@
 			return this.$store.state.learningPath.learningMaterials
 		},
 		indent() {
-        	return { marginLeft: `${this.depth * 2}rem` }
+        	return { marginLeft: `${(this.depth - 1) * 6}rem` }
       	}
 	},
 	methods: {
 		flipEditSwitch(){
-			console.log(this.id)
 			this.$store.dispatch('flipEditSwitch', this.id)
 		}
 	}
@@ -45,13 +44,16 @@
 		&__container {
 			display: flex;
 		}
+		&__container:hover .tree-struct__edit{
+			display: flex;
+		}
 		&__edit{
+			display: none;	
 			background-color: #fff;
 			height: 3.6rem;
 			border-radius: 3px;
 			width: 3.6rem;
 			margin-left: .5rem;
-			display: flex;
 			justify-content: center;
 			align-items: center;
 			&--link{
