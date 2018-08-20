@@ -134,6 +134,7 @@
 								}
 								else { 
 									if (data.status.message === "User unsuccesfully registered: TypeError: Cannot read property 'password' of null") this.err = "User must enter a password"
+									if (data.status.message === "User unsuccesfully registered: Password does not match") this.err = "Incorrect password"
 								}
 							})
 							.catch( err => console.log(err))

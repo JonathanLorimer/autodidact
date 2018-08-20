@@ -3,15 +3,21 @@ import apollo from '../../apolloClient'
 
 const state = {
 	currentUser: '',
+	currentUserId: '',
+	currentUserPaths: [],
 	loginSwitch: false
 }
 
 const mutations = {
-	SET_USER (state, { email }) {
+	SET_USER (state, { email, id }) {
 		state.currentUser = email
+		state.currentUserId = id
 	},
 	SET_LOGIN_SWITCH (state) {
 		state.loginSwitch = !state.loginSwitch
+	},
+	UPDATE_USER_PATHS (state, { id }) {
+		state.currentUserPaths.push(id)
 	}
 }
 
@@ -36,7 +42,7 @@ const actions = {
 
 		const response = apollo.query({ query, variables })
 			.then( res => {
-				if ( res.data.registerUser.status.success ) commit('SET_USER', { email })
+				if ( res.data.registerUser.status.success ) commit('SET_USER', { email, id: res.data.registerUser.uuid })
 				return res.data.registerUser 
 			})
 			.catch( err => console.log(err) )
@@ -63,7 +69,7 @@ const actions = {
 
 		const response = apollo.query({ query, variables })
 			.then( res => {
-				if ( res.data.loginUser.status.success ) commit('SET_USER', { email })
+				if ( res.data.loginUser.status.success ) commit('SET_USER', { email, id: res.data.loginUser.uuid })
 				return res.data.loginUser
 			})
 			.catch( err => console.log(err) )
@@ -87,7 +93,7 @@ const actions = {
 		const response = apollo.query({ query, variables })
 			.then( res => {
 				let email = res.data.loginUserById.email
-				if ( res.data.loginUserById.status.success ) commit('SET_USER', { email })
+				if ( res.data.loginUserById.status.success ) commit('SET_USER', { email, id: res.data.loginUserById.uuid })
 				return res.data.loginUserById
 			})
 			.catch( err => console.log(err) )
@@ -95,9 +101,10 @@ const actions = {
 		return response
 	},
 	logout({ commit }){
-		commit('SET_USER', '')
+		commit('SET_USER',{ email: '', id: '' })
 	},
 	setCookie({ commit }, cookieDetails){
+		console.log()
 		let { name, value, days } = cookieDetails
 		let expires = ""
 		if (days) {

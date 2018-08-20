@@ -13,6 +13,7 @@ import Login from './components/Login.vue'
 import Create from './components/Create.vue'
 import CreateForm from './components/CreateForm.vue'
 import EditForm from './components/EditForm.vue'
+import LearningPathForm from './components/LearningPathForm.vue'
 import ViewProj from './components/ViewProj.vue'
 import TreeStruct from './components/TreeStruct.vue'
 
@@ -30,6 +31,7 @@ Vue.component('login', Login)
 Vue.component('create', Create)
 Vue.component('create-form', CreateForm)
 Vue.component('edit-form', EditForm)
+Vue.component('learning-path-form', LearningPathForm)
 Vue.component('view-proj', ViewProj)
 Vue.component('tree-struct', TreeStruct)
 

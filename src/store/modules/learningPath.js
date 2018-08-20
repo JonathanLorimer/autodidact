@@ -5,6 +5,8 @@ const state = {
 	learningPath: {id: 'root', nodes:[]},
 	learningMaterials: {},
 	editSwitch: false,
+	currentPathId: '',
+	currentPathName: '',
 	editing: {}
 }
 
@@ -40,9 +42,11 @@ const mutations = {
 
 		}
 	},
-	SET_STATE(state, { materials, path }){
+	SET_STATE(state, { materials, path, currentId, currentName }){
 		state.learningMaterials = materials
 		state.learningPath = path
+		state.currentPathId = currentId
+		state.currentPathName = currentName
 	},
 	SET_EDIT_SWITCH(state){
 		state.editSwitch = !state.editSwitch
@@ -77,6 +81,10 @@ const mutations = {
 		}
 
 		state.learningPath = remove(state.learningPath, id)
+	},
+	SET_CURRENT_PATH (state, { id, name }) {
+		state.currentPathId = id
+		state.currentPathName = name
 	}
 }
 
@@ -103,16 +111,55 @@ const actions = {
 		commit('UPDATE_MATERIAL', { material })
 	},
 	setStateFromLocalStorage({ commit }){
-		commit('SET_STATE', { materials: JSON.parse(localStorage.getItem('learningMaterials')), path: JSON.parse(localStorage.getItem('learningPath')) })
+		commit('SET_STATE', { 
+			materials: JSON.parse(localStorage.getItem('learningMaterials')), 
+			path: JSON.parse(localStorage.getItem('learningPath')),
+			currentId: localStorage.getItem('currentPathId'),
+			currentName: localStorage.getItem('currentPathName')
+		})
 	},
-	clearLocalStorage({ commit }){
+	clearLocalStorage(){
 		window.localStorage.removeItem("learningPath");
 		window.localStorage.removeItem("learningMaterials");
+		window.localStorage.removeItem("currentPathName");
+		window.localStorage.removeItem("currentPathId");
 	},
 	flipEditSwitch({ commit }, id = false){
 		commit('SET_EDIT_SWITCH')
 		if (id) commit('SET_EDITED', { id })
-	}
+	},
+	saveLearningPath({ commit }, { userId, name }) {
+		let learningMaterials = Object.values(state.learningMaterials)
+		const mutation = gql`mutation RegisterLearningPath($input: LearningPathInput!, $userId: String!, $name: String! ) {
+			registerLearningPath(input: $input, userId: $userId, name: $name){
+				status {
+					success
+					message
+				}
+    			id
+			}
+		}`
+		
+		const variables = {
+			input: {learningPath: state.learningPath, learningMaterials},
+			userId,
+			name
+		}
+
+		const response = apollo.mutate({ mutation, variables })
+			.then( res => {
+				if ( res.data.registerLearningPath.status.success ) {
+					commit('UPDATE_USER_PATHS', { id: res.data.registerLearningPath.id })
+					commit('SET_CURRENT_PATH', { id: res.data.registerLearningPath.id, name })
+					window.localStorage.setItem('currentPathName', name)
+					window.localStorage.setItem('currentPathId', res.data.registerLearningPath.id)
+			}
+				return res.data.registerUser
+			})
+			.catch( err => console.log(err) )
+
+		return response
+	},
 }
 
 export default {
