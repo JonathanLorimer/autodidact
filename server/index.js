@@ -9,11 +9,9 @@ const {
 	insertUser, 
 	getUserByEmail, 
 	getUserById,
-	insertLearningPath
+	insertLearningPath,
+	findAndSetLearningPath
 } = require('./database')
-
-
-
 
 
 const typeDefs = `
@@ -43,6 +41,7 @@ const typeDefs = `
 
 	type Mutation {
 		registerLearningPath(input: LearningPathInput, userId: String!, name: String!): PathResponse
+		updateLearningPath(input: LearningPathInput, pathId: String!): PathResponse
 	}
 
 	type Login {
@@ -68,7 +67,8 @@ const resolvers = {
 		loginUserById: (_, { id }) => getUserById(id).then(result => result),
 	},
 	Mutation: {
-		registerLearningPath: (_, learningObj) => insertLearningPath(learningObj).then(result => result)
+		registerLearningPath: (_, learningObj) => insertLearningPath(learningObj).then(result => result),
+		updateLearningPath: (_, learningObj) => findAndSetLearningPath(learningObj).then(result => result)
 	}
 }
 

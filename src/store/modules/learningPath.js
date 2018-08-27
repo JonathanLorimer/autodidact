@@ -154,12 +154,35 @@ const actions = {
 					window.localStorage.setItem('currentPathName', name)
 					window.localStorage.setItem('currentPathId', res.data.registerLearningPath.id)
 			}
-				return res.data.registerUser
+				return res.data.registerLearningPath
 			})
 			.catch( err => console.log(err) )
 
 		return response
 	},
+	updateLearningPath({ commit }){
+		let learningMaterials = Object.values(state.learningMaterials)
+		const mutation = gql`mutation UpdateLearningPath($input: LearningPathInput!, $pathId: String! ) {
+			updateLearningPath(input: $input, pathId: $pathId){
+				status {
+					success
+					message
+				}
+    			id
+			}
+		}`
+		
+		const variables = {
+			input: { learningPath: state.learningPath, learningMaterials },
+			pathId: state.currentPathId
+		}
+
+		const response = apollo.mutate({ mutation, variables })
+			.then( res => res.data.updateLearningPath)
+			.catch( err => console.log(err) )
+
+		return response
+	}
 }
 
 export default {

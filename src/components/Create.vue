@@ -29,7 +29,7 @@
 					+ Add Learning Material
 				</button>
 				<button class="save-learning-path btn" @click="flipLPSwitch">
-					Save Learning Path
+					{{buttonText}}
 				</button>
 			</div>
 		</div>
@@ -58,10 +58,12 @@
 				},
 				currentPathName(){
 					return this.$store.state.learningPath.currentPathName
+				},
+				buttonText(){
+					return this.$store.state.learningPath.currentPathId ? 'Update Learning Path' : 'Save Learning Path'
 				}
 			},
 			mounted(){
-
 			},
 			methods: {
 				flipCreateSwitch(){

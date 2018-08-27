@@ -1,20 +1,30 @@
 <template>
 	<div>
 		<div class="container" @click.stop="doNothing">
-			<form action="" class="learning-path" @submit.prevent="submitLearningPath">
-				<div class="learning-path__name-container">
-					<input
-						type="text" 
-						class="learning-path__name"
-						v-model="learningPath.name"
-						maxlength="100" 
-						placeholder="Name"
-						@click="clearErr">
-					<label for="learning-path__name" class="learning-path__name-label"> Name </label>
+			<transition name="fade" mode="out-in">
+				<form action="" class="learning-path fade" @submit.prevent="submitLearningPath" v-if="!success" :key="'form'">
+				<!-- <form action="" class="learning-path fade" @submit.prevent="submitLearningPath" :key="'form'"> -->
+					<div class="learning-path__name-container">
+						<input
+							type="text" 
+							class="learning-path__name"
+							v-model="learningPath.name"
+							maxlength="100" 
+							placeholder="Name"
+							@click="clearErr">
+						<label for="learning-path__name" class="learning-path__name-label"> Name </label>
+					</div>
+					<button class="learning-path__submit btn" type="submit" > Submit </button>
+					<div class="err">{{this.err}}</div>
+				</form>
+				<div class="success-message fade" v-else :key="'success-message'">
+				<!-- <div class="success-message fade" :key="'success-message'"> -->
+					<div class="success-message__message">
+						<img src="../assets/approved_check_checkbox_checkmark_confirm_success_yes_icon_128.svg" alt="" class="success-message__image">
+						Learning Path successfully saved
+					</div>
 				</div>
-				<button class="learning-path__submit btn" type="submit"> Submit </button>
-				<div class="err">{{this.err}}</div>
-			</form>
+			</transition>
 		</div>
 	</div>
 </template>
@@ -31,6 +41,7 @@
 					name: '',
 				},
 				err: '',
+				success: false,
 			}
 		},
 		computed: {
@@ -47,14 +58,37 @@
 
 
 				// Save the PathlearningPath and flip the form switch
-				if(this.learningPath.name) {
+				if (this.$store.state.learningPath.currentPathId){
+					this.$store.dispatch('updateLearningPath')
+					.then(res => {
+						if (res.status.success){
+							this.success = true
+							setTimeout(() => {
+								this.$emit('flipLPSwitch')
+								this.learningPath = {
+									name: '',
+								}
+								this.success = false
+							}, 2500)
+						}
+					})
+				}
+				else if(this.learningPath.name) {
 					let userId = this.$store.state.users.currentUserId
 					let name = this.learningPath.name
 					this.$store.dispatch('saveLearningPath', { userId, name })
-					this.$emit('flipLPSwitch')
-					this.learningPath = {
-						name: '',
-					}
+					.then(res => {
+						if (res.status.success){
+							this.success = true
+							setTimeout(() => {
+								this.$emit('flipLPSwitch')
+								this.learningPath = {
+									name: '',
+								}
+								this.success = false
+							}, 2500)
+						}
+					})
 				}
 			},
 			doNothing(){}
@@ -62,6 +96,23 @@
 	}
 </script>
 <style lang="scss" scoped>
+	// transition group
+	.fade-enter-active {
+	  transition: all .3s ease;
+	}
+	.fade-leave-active {
+	  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+	}
+	.fade-enter, .fade-leave-to
+	/* .slide-fade-leave-active below version 2.1.8 */ {
+	  transform: translateX(10px);
+	  opacity: 0;
+	}
+	.transition-wrapper {
+		height: 100%;
+		width: 100%;
+	}
+
 	.btn {
 		&:focus{
 		outline: none;
@@ -160,6 +211,21 @@
 			&__submit {
 				height: 4rem;
 				width: 15rem;
+			}
+		}
+		.success-message {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			&__message{
+				display: flex;
+				align-items: center;
+				margin-top: 4rem;
+			}
+			&__image {
+				height: 4.8rem;
+				width: 4.8rem;
+				margin-right: 2rem;
 			}
 		}
 	}

@@ -56,7 +56,15 @@ const insertLearningPath = async (learningObj) => {
 	let update = await db.collection('user-data').findOneAndUpdate({_id: learningObj.userId}, {$push: {learningPaths: learningObj._id} })
 	db.close()
 	if (insert && update) return { status: {success: true, message:"Learning Path successfully registered"}, id: learningObj._id }
-	else return { status: {success: false, message:"Learning Path unsuccessfully registered"}, id: '', pathName: '' }
+	else return { status: {success: false, message:"Learning Path unsuccessfully registered"}, id: '' }
+}
+
+const findAndSetLearningPath = async (learningObj) => {
+	let db = await MongoClient.connect(url)
+	let update = await db.collection('learning-paths').findOneAndUpdate({_id: learningObj.pathId}, {$set: {input: learningObj.input}})
+	db.close()
+	if (update) return { status: {success: true, message:"Learning Path successfully updated"}, id: update.value._id }
+	else return { status: {success: false, message:"Learning Path unsuccessfully updated"}, id: '' }
 }
   
 
@@ -64,5 +72,6 @@ module.exports = {
 	insertUser,
 	getUserByEmail,
 	getUserById,
-	insertLearningPath
+	insertLearningPath,
+	findAndSetLearningPath
 	}
