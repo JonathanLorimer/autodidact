@@ -22,6 +22,11 @@ export default {
 		return {
 		}
 	},
+	created () {
+		if (!this.$store.state.users.currentUserId){
+			this.$store.dispatch('clearLocalStorage')
+		}
+	},
 	computed:{
 		loginSwitch(){
 			return this.$store.state.users.loginSwitch

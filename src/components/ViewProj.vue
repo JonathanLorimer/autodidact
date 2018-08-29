@@ -1,5 +1,9 @@
 	<template>
-		<div class="test-text">View Page</div>
+		<div class="test-text">View Page
+			<ul>
+				<li v-for="path in learningPaths" :key="path._id">{{ path.name }}</li>
+			</ul>
+		</div>
 	</template>
 
 	<script>
@@ -10,6 +14,11 @@
 			data () {
 				return {
 					
+				}
+			},
+			computed: {
+				learningPaths(){
+					return this.$store.state.projects.learningPaths
 				}
 			},
 			mounted(){

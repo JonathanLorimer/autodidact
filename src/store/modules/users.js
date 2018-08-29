@@ -4,7 +4,6 @@ import apollo from '../../apolloClient'
 const state = {
 	currentUser: '',
 	currentUserId: '',
-	currentUserPaths: [],
 	loginSwitch: false
 }
 
@@ -15,9 +14,6 @@ const mutations = {
 	},
 	SET_LOGIN_SWITCH (state) {
 		state.loginSwitch = !state.loginSwitch
-	},
-	UPDATE_USER_PATHS (state, { id }) {
-		state.currentUserPaths.push(id)
 	}
 }
 
@@ -58,7 +54,39 @@ const actions = {
 					message
 				}
 				email
-    			uuid
+				uuid
+				learningPaths {
+					learningPath {
+						id
+						nodes {
+							id
+							nodes {
+								id
+								nodes {
+									id
+									nodes {
+										id 
+										nodes {
+											id
+										}
+									}
+								}
+							}
+						}
+					}
+					learningMaterials {
+						id
+						name
+						type
+						link
+						preReq {
+							id
+							name
+							type
+							link
+						}
+					}
+				}
 			}
 		}`
 		
@@ -84,7 +112,39 @@ const actions = {
 					message
 				}
 				email
-    			uuid
+				uuid
+				learningPaths {
+					learningPath {
+						id
+						nodes {
+							id
+							nodes {
+								id
+								nodes {
+									id
+									nodes {
+										id 
+										nodes {
+											id
+										}
+									}
+								}
+							}
+						}
+					}
+					learningMaterials {
+						id
+						name
+						type
+						link
+						preReq {
+							id
+							name
+							type
+							link
+						}
+					}
+				}
 			}
 		}`
 		
@@ -100,8 +160,9 @@ const actions = {
 
 		return response
 	},
-	logout({ commit }){
+	logout({ commit, dispatch }){
 		commit('SET_USER',{ email: '', id: '' })
+		dispatch('clearLocalStorage')
 	},
 	setCookie({ commit }, cookieDetails){
 		console.log()

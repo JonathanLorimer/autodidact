@@ -1,6 +1,6 @@
 	<template>
 		<div class="container">
-			<div class="path-name">&#34;{{ currentPathName }}&#34;</div>
+			<div class="path-name" v-show="currentPathName">&#34;{{ currentPathName }}&#34;</div>
 			<tree-struct
 				class="root"
 				:id="learningPath.id"
@@ -28,7 +28,7 @@
 				<button class="add-material btn" @click="flipCreateSwitch">
 					+ Add Learning Material
 				</button>
-				<button class="save-learning-path btn" @click="flipLPSwitch">
+				<button class="save-learning-path btn" :class="{'disabled-btn': !currentUser}" @click="flipLPSwitch" :disabled="!currentUser">
 					{{buttonText}}
 				</button>
 			</div>
@@ -61,6 +61,9 @@
 				},
 				buttonText(){
 					return this.$store.state.learningPath.currentPathId ? 'Update Learning Path' : 'Save Learning Path'
+				},
+				currentUser(){
+					return this.$store.state.users.currentUser
 				}
 			},
 			mounted(){
@@ -126,7 +129,7 @@
 			outline: none;
 			}
 			border: none;
-			box-shadow: 2px 5px 1rem rgba(44, 62, 80, 0.25);;
+			box-shadow: 2px 5px 1rem rgba(44, 62, 80, 0.25);
 			border-radius: 50rem;
 			font-size: 1.6rem;
 			margin-top: 1rem;
@@ -143,6 +146,20 @@
 				box-shadow: 2px 5px 1rem rgba(44, 62, 80, 0.25);
 			}
 		}
+
+		.btn.disabled-btn {
+			cursor: auto;
+			box-shadow: none;
+			&:hover{
+				transform: none;
+				box-shadow: none;
+			}
+
+			&:active{
+				transform: none;
+				box-shadow: none;
+			}
+		}
 		.button-container{
 			display: flex;
 			justify-content: space-evenly;
@@ -154,6 +171,9 @@
 				color: #fff;
 				height: 6rem;
 				width: 24rem;
+			}
+			.save-learning-path.disabled-btn {
+				background-color: #b7cec2;
 			}
 		}
 

@@ -16,21 +16,21 @@ const {
 
 const typeDefs = `
 	input LearningPathInput {
-		learningPath: Path
-		learningMaterials: [Material]
+		learningPath: PathInput
+		learningMaterials: [MaterialInput]
 	}
 
-	input Material {
+	input MaterialInput {
 		id: String
 		name: String
 		type: String
 		link: String
-		preReq: Material
+		preReq: MaterialInput
 	}
 
-	input Path {
+	input PathInput {
 		id: String!
-		nodes: [Path]
+		nodes: [PathInput]
 	}
 
 	type Query {
@@ -41,14 +41,14 @@ const typeDefs = `
 
 	type Mutation {
 		registerLearningPath(input: LearningPathInput, userId: String!, name: String!): PathResponse
-		updateLearningPath(input: LearningPathInput, pathId: String!): PathResponse
+		updateLearningPath(input: LearningPathInput, pathId: String!, name: String!): PathResponse
 	}
 
 	type Login {
 		status: SuccessMessage!
 		email: String!
 		uuid: String!
-		learningPaths: [String] 
+		learningPaths: [LearningPathType] 
 	}
 	type SuccessMessage {
 		success: Boolean!
@@ -58,13 +58,37 @@ const typeDefs = `
 		status: SuccessMessage!
 		id: String!
 	}
+	type LearningPathType {
+		learningPath: PathType
+		learningMaterials: [MaterialType]
+	}
+
+	type MaterialType {
+		id: String
+		name: String
+		type: String
+		link: String
+		preReq: MaterialType
+	}
+
+	type PathType {
+		id: String!
+		nodes: [PathType]
+	}
+
 `
 
 const resolvers = {
 	Query: {
 		registerUser: (_, user) => insertUser(user).then(result => result),
-		loginUser: (_, user) => getUserByEmail(user).then(result => result),
-		loginUserById: (_, { id }) => getUserById(id).then(result => result),
+		loginUser: (_, user) => getUserByEmail(user).then(result => {
+			console.log(result)
+			return result
+		}),
+		loginUserById: (_, { id }) => getUserById(id).then(result => {
+			console.log(result)
+			return result
+		}),
 	},
 	Mutation: {
 		registerLearningPath: (_, learningObj) => insertLearningPath(learningObj).then(result => result),

@@ -23,7 +23,6 @@ const insertUser = async (user) => {
 	else {
 		let hash = await bcrypt.hash(user.password, saltRounds)
 		user.password = hash
-		user.learningPaths = []
 		let insert = await db.collection('user-data').insertOne(user)
 		db.close()
 
@@ -34,18 +33,22 @@ const insertUser = async (user) => {
 const getUserByEmail = async (user) => {
 	let db = await MongoClient.connect(url)
 	let res = await db.collection('user-data').findOne({email: user.email})
+	let lps = await db.collection('learning-paths').find({userId: res._id}).toArray()
+	lps = lps.map(e => e.input)
 	db.close()
 	let pwdCheck = await bcrypt.compare(user.password, res.password)
 
-	if (pwdCheck) return { status: {success: true, message: 'User succesfully logged in' }, email: res.email, uuid: res._id, learningPaths: res.learningPaths }
+	if (pwdCheck) return { status: {success: true, message: 'User succesfully logged in' }, email: res.email, uuid: res._id, learningPaths: lps }
 	else return	{ status: {success: false, message: 'User unsuccesfully registered: Password does not match' }, email: '', uuid: ''}
 }
 
 const getUserById = async (userId) => {
 	let db = await MongoClient.connect(url)
 	let res = await db.collection('user-data').findOne({_id: userId})
+	let lps = await db.collection('learning-paths').find({userId: userId}).toArray()
+	lps = lps.map(e => e.input)
 	db.close()
-	if (res) return { status: {success: true, message: "User succesfully logged in" }, email: res.email, uuid: res._id, learningPaths: res.learningPaths}
+	if (res) return { status: {success: true, message: "User succesfully logged in" }, email: res.email, uuid: res._id, learningPaths: lps}
 	else return { status: {success: false, message: "User unsuccesfully logged in", email: '', uuid: ''} }
 }
 
@@ -53,15 +56,14 @@ const insertLearningPath = async (learningObj) => {
 	learningObj._id = uuid()
 	let db = await MongoClient.connect(url)
 	let insert = await db.collection('learning-paths').insertOne(learningObj)
-	let update = await db.collection('user-data').findOneAndUpdate({_id: learningObj.userId}, {$push: {learningPaths: learningObj._id} })
 	db.close()
-	if (insert && update) return { status: {success: true, message:"Learning Path successfully registered"}, id: learningObj._id }
+	if (insert) return { status: {success: true, message:"Learning Path successfully registered"}, id: learningObj._id }
 	else return { status: {success: false, message:"Learning Path unsuccessfully registered"}, id: '' }
 }
 
 const findAndSetLearningPath = async (learningObj) => {
 	let db = await MongoClient.connect(url)
-	let update = await db.collection('learning-paths').findOneAndUpdate({_id: learningObj.pathId}, {$set: {input: learningObj.input}})
+	let update = await db.collection('learning-paths').findOneAndUpdate({_id: learningObj.pathId}, {$set: {input: learningObj.input, name: learningObj.name}})
 	db.close()
 	if (update) return { status: {success: true, message:"Learning Path successfully updated"}, id: update.value._id }
 	else return { status: {success: false, message:"Learning Path unsuccessfully updated"}, id: '' }

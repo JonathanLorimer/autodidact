@@ -83,8 +83,12 @@ const mutations = {
 		state.learningPath = remove(state.learningPath, id)
 	},
 	SET_CURRENT_PATH (state, { id, name }) {
-		state.currentPathId = id
-		state.currentPathName = name
+		if (id){
+			state.currentPathId = id
+		}
+		if (name){
+			state.currentPathName = name
+		}
 	}
 }
 
@@ -149,7 +153,6 @@ const actions = {
 		const response = apollo.mutate({ mutation, variables })
 			.then( res => {
 				if ( res.data.registerLearningPath.status.success ) {
-					commit('UPDATE_USER_PATHS', { id: res.data.registerLearningPath.id })
 					commit('SET_CURRENT_PATH', { id: res.data.registerLearningPath.id, name })
 					window.localStorage.setItem('currentPathName', name)
 					window.localStorage.setItem('currentPathId', res.data.registerLearningPath.id)
@@ -160,10 +163,11 @@ const actions = {
 
 		return response
 	},
-	updateLearningPath({ commit }){
+	updateLearningPath({ commit }, name){
+		
 		let learningMaterials = Object.values(state.learningMaterials)
-		const mutation = gql`mutation UpdateLearningPath($input: LearningPathInput!, $pathId: String! ) {
-			updateLearningPath(input: $input, pathId: $pathId){
+		const mutation = gql`mutation UpdateLearningPath($input: LearningPathInput!, $pathId: String!, $name: String! ) {
+			updateLearningPath(input: $input, pathId: $pathId, name: $name){
 				status {
 					success
 					message
@@ -174,11 +178,18 @@ const actions = {
 		
 		const variables = {
 			input: { learningPath: state.learningPath, learningMaterials },
-			pathId: state.currentPathId
+			pathId: state.currentPathId,
+			name
 		}
 
 		const response = apollo.mutate({ mutation, variables })
-			.then( res => res.data.updateLearningPath)
+			.then( res => {
+				if ( res.data.updateLearningPath.status.success ) {
+					commit('SET_CURRENT_PATH', { id: null, name })
+					window.localStorage.setItem('currentPathName', name)
+				}
+				return res.data.updateLearningPath
+			})
 			.catch( err => console.log(err) )
 
 		return response

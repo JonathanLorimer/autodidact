@@ -129,6 +129,7 @@
 						this.$store.dispatch('loginUser', { email: this.login.email.trim(), password: this.login.password.trim() })
 							.then( data => {
 								if (data.status.success) {
+									this.$store.dispatch('setUsersLearningPaths', data.learningPaths)
 									this.$store.dispatch('setCookie', { name: 'userCookie', value: data.uuid, days: 1})
 									this.$store.dispatch('flipLoginSwitch')
 								}

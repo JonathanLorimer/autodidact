@@ -47,6 +47,9 @@
 		computed: {
 		},
 		mounted(){
+			if (this.$store.state.learningPath.currentPathName){
+				this.learningPath.name = this.$store.state.learningPath.currentPathName
+			}
 		},
 		methods: {
 			clearErr(){
@@ -59,7 +62,7 @@
 
 				// Save the PathlearningPath and flip the form switch
 				if (this.$store.state.learningPath.currentPathId){
-					this.$store.dispatch('updateLearningPath')
+					this.$store.dispatch('updateLearningPath', this.learningPath.name)
 					.then(res => {
 						if (res.status.success){
 							this.success = true
