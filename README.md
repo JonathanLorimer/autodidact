@@ -5,6 +5,13 @@ After cloning the repo you will need to run ``npm install`` to download the depe
 
 The node.js driver for MongoDB should have been downloaded when you installed the dependencies.
 
+If you don't have MongoDB installed locally, you can brew install it by running:
+
+```
+brew update
+brew install mongodb
+```
+
 Run this command from the directory root to make your own Mongo DB store
 
 ```mkdir -p /data/db```
