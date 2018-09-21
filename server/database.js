@@ -68,12 +68,26 @@ const findAndSetLearningPath = async (learningObj) => {
 	if (update) return { status: {success: true, message:"Learning Path successfully updated"}, id: update.value._id }
 	else return { status: {success: false, message:"Learning Path unsuccessfully updated"}, id: '' }
 }
-  
+
+const getAllLearningPaths = async () => {
+	let db = await MongoClient.connect(url)
+	let lps = await db.collection('learning-paths').find().toArray()
+	lps = lps.map(e => { 
+		return {
+			name: e.name,
+			learningPath: e.input.learningPath,
+			learningMaterials: e.input.learningMaterials
+		}
+	})
+	db.close()
+	return lps
+}
 
 module.exports = {
 	insertUser,
 	getUserByEmail,
 	getUserById,
 	insertLearningPath,
-	findAndSetLearningPath
-	}
+	findAndSetLearningPath,
+	getAllLearningPaths
+}

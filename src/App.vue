@@ -15,16 +15,19 @@ export default {
 				if (res && !this.$store.state.users.currentUser) {
 					this.$store.dispatch('loginUserById', res)
 				}
+				if (!this.$store.state.users.currentUserId){
+					this.$store.dispatch('clearLocalStorage')
+				} 
+				if(JSON.parse(localStorage.getItem('learningPath')) && JSON.parse(localStorage.getItem('learningMaterials'))) this.$store.dispatch('setStateFromLocalStorage')
 			})
-		if(JSON.parse(localStorage.getItem('learningPath')) && JSON.parse(localStorage.getItem('learningMaterials'))) this.$store.dispatch('setStateFromLocalStorage')
+		
+		this.$store.dispatch('getNonUserProjects')
+			.then(res => {
+				if (res) this.$store.dispatch('flipNonUserFlag')
+			})
 	},
 	data () {
 		return {
-		}
-	},
-	created () {
-		if (!this.$store.state.users.currentUserId){
-			this.$store.dispatch('clearLocalStorage')
 		}
 	},
 	computed:{

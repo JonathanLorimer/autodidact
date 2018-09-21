@@ -10,85 +10,82 @@ const {
 	getUserByEmail, 
 	getUserById,
 	insertLearningPath,
-	findAndSetLearningPath
+	findAndSetLearningPath,
+	getAllLearningPaths
 } = require('./database')
 
 
 const typeDefs = `
-	input LearningPathInput {
-		learningPath: PathInput
-		learningMaterials: [MaterialInput]
-	}
+input LearningPathInput {
+	learningPath: PathInput
+	learningMaterials: [MaterialInput]
+}
 
-	input MaterialInput {
-		id: String
-		name: String
-		type: String
-		link: String
-		preReq: MaterialInput
-	}
+input MaterialInput {
+	id: String
+	name: String
+	type: String
+	link: String
+	preReq: MaterialInput
+}
 
-	input PathInput {
-		id: String!
-		nodes: [PathInput]
-	}
+input PathInput {
+	id: String!
+	nodes: [PathInput]
+}
 
-	type Query {
-		registerUser(email: String!, password: String!): Login
-		loginUser(email: String!, password: String!): Login
-		loginUserById(id: String!): Login
-	}
+type Query {
+	registerUser(email: String!, password: String!): Login
+	loginUser(email: String!, password: String!): Login
+	loginUserById(id: String!): Login
+	getNonUserProjects: [LearningPathType]
+}
 
-	type Mutation {
-		registerLearningPath(input: LearningPathInput, userId: String!, name: String!): PathResponse
-		updateLearningPath(input: LearningPathInput, pathId: String!, name: String!): PathResponse
-	}
+type Mutation {
+	registerLearningPath(input: LearningPathInput, userId: String!, name: String!): PathResponse
+	updateLearningPath(input: LearningPathInput, pathId: String!, name: String!): PathResponse
+}
 
-	type Login {
-		status: SuccessMessage!
-		email: String!
-		uuid: String!
-		learningPaths: [LearningPathType] 
-	}
-	type SuccessMessage {
-		success: Boolean!
-		message: String!
-	}
-	type PathResponse {
-		status: SuccessMessage!
-		id: String!
-	}
-	type LearningPathType {
-		learningPath: PathType
-		learningMaterials: [MaterialType]
-	}
+type Login {
+	status: SuccessMessage!
+	email: String!
+	uuid: String!
+	learningPaths: [LearningPathType] 
+}
+type SuccessMessage {
+	success: Boolean!
+	message: String!
+}
+type PathResponse {
+	status: SuccessMessage!
+	id: String!
+}
+type LearningPathType {
+	name: String
+	learningPath: PathType
+	learningMaterials: [MaterialType]
+}
 
-	type MaterialType {
-		id: String
-		name: String
-		type: String
-		link: String
-		preReq: MaterialType
-	}
+type MaterialType {
+	id: String
+	name: String
+	type: String
+	link: String
+	preReq: MaterialType
+}
 
-	type PathType {
-		id: String!
-		nodes: [PathType]
-	}
-
+type PathType {
+	id: String!
+	nodes: [PathType]
+}
 `
 
 const resolvers = {
 	Query: {
 		registerUser: (_, user) => insertUser(user).then(result => result),
-		loginUser: (_, user) => getUserByEmail(user).then(result => {
-			console.log(result)
-			return result
-		}),
-		loginUserById: (_, { id }) => getUserById(id).then(result => {
-			console.log(result)
-			return result
-		}),
+		loginUser: (_, user) => getUserByEmail(user).then(result => result),
+		loginUserById: (_, { id }) => getUserById(id).then(result => result),
+		getNonUserProjects: (_) => getAllLearningPaths().then(result => result),
 	},
 	Mutation: {
 		registerLearningPath: (_, learningObj) => insertLearningPath(learningObj).then(result => result),

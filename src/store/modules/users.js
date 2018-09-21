@@ -56,6 +56,7 @@ const actions = {
 				email
 				uuid
 				learningPaths {
+					name
 					learningPath {
 						id
 						nodes {
@@ -67,7 +68,13 @@ const actions = {
 									nodes {
 										id 
 										nodes {
-											id
+											id 
+											nodes {
+												id 
+												nodes {
+													id
+												}
+											}
 										}
 									}
 								}
