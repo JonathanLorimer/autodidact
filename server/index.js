@@ -38,11 +38,11 @@ type Query {
 	registerUser(email: String!, password: String!): Login
 	loginUser(email: String!, password: String!): Login
 	loginUserById(id: String!): Login
-	getNonUserProjects: [LearningPathType]
+	getAllProjects: [LearningPathType]
 }
 
 type Mutation {
-	registerLearningPath(input: LearningPathInput, userId: String!, name: String!): PathResponse
+	registerLearningPath(input: LearningPathInput, userId: String!, name: String!, username: String!): PathResponse
 	updateLearningPath(input: LearningPathInput, pathId: String!, name: String!): PathResponse
 }
 
@@ -61,6 +61,8 @@ type PathResponse {
 	id: String!
 }
 type LearningPathType {
+	userId: String
+	username: String
 	name: String
 	learningPath: PathType
 	learningMaterials: [MaterialType]
@@ -85,7 +87,7 @@ const resolvers = {
 		registerUser: (_, user) => insertUser(user).then(result => result),
 		loginUser: (_, user) => getUserByEmail(user).then(result => result),
 		loginUserById: (_, { id }) => getUserById(id).then(result => result),
-		getNonUserProjects: (_) => getAllLearningPaths().then(result => result),
+		getAllProjects: (_) => getAllLearningPaths().then(result => result),
 	},
 	Mutation: {
 		registerLearningPath: (_, learningObj) => insertLearningPath(learningObj).then(result => result),

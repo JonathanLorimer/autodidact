@@ -4,18 +4,25 @@ import apollo from '../../apolloClient'
 const state = {
 	userLearningPaths: [],
 	nonUserProjects: [],
-	nonUserPathsFlag: false,
+	userProjects: [],
+	firstLoad: false,
 }
 
 const mutations = {
 	SET_USER_PATHS (state, { lps }) {
 		state.userLearningPaths = lps
 	},
-	SET_NON_USER_PROJECTS (state, { projects }) {
-		state.nonUserProjects = projects
+	SET_ALL_PROJECTS (state, { projects, currentUserId }) {
+		const projectsObj = projects.reduce((acc, cur) => {
+			if (cur.userId === currentUserId) acc.u.push(cur)
+			else acc.nu.push(cur)
+			return acc
+		}, {u: [], nu: []})
+		state.nonUserProjects = projectsObj.nu
+		state.userProjects = projectsObj.u
 	},
-	FLIP_NON_USER_FLAG (state){
-		state.nonUserPathsFlag = !state.nonUserPathsFlag
+	FLIP_FIRST_LOAD_FLAG (state){
+		state.firstLoad = !state.firstLoad
 	}
 }
 
@@ -23,9 +30,11 @@ const actions = {
 	setUsersLearningPaths({ commit }, lps){
 		commit('SET_USER_PATHS', { lps })
 	},
-	getNonUserProjects({ commit }){
-		const query = gql`query GetNonUserProjects {
-			getNonUserProjects {
+	getAllProjects({ commit}, currentUserId){
+		const query = gql`query getAllProjects {
+			getAllProjects {
+				userId
+				username
 				name
 				learningPath {
 					id
@@ -70,15 +79,15 @@ const actions = {
 
 		const response = apollo.query({ query })
 			.then( res => {
-				commit('SET_NON_USER_PROJECTS', { projects: res.getNonUserProjects })
+				commit('SET_ALL_PROJECTS', { projects: res.data.getAllProjects, currentUserId })
 				return true
 			})
 			.catch( err => console.log(err) )
 
 		return response
 	},
-	flipNonUserFlag({ commit }){
-		commit('FLIP_NON_USER_FLAG')
+	flipFirstLoadFlag({ commit }){
+		commit('FLIP_FIRST_LOAD_FLAG')
 	}
 }
 

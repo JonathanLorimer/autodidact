@@ -132,10 +132,10 @@ const actions = {
 		commit('SET_EDIT_SWITCH')
 		if (id) commit('SET_EDITED', { id })
 	},
-	saveLearningPath({ commit }, { userId, name }) {
+	saveLearningPath({ commit }, { userId, name, username }) {
 		let learningMaterials = Object.values(state.learningMaterials)
-		const mutation = gql`mutation RegisterLearningPath($input: LearningPathInput!, $userId: String!, $name: String! ) {
-			registerLearningPath(input: $input, userId: $userId, name: $name){
+		const mutation = gql`mutation RegisterLearningPath($input: LearningPathInput!, $userId: String!, $name: String!, $username: String! ) {
+			registerLearningPath(input: $input, userId: $userId, name: $name, username: $username){
 				status {
 					success
 					message
@@ -147,7 +147,8 @@ const actions = {
 		const variables = {
 			input: {learningPath: state.learningPath, learningMaterials},
 			userId,
-			name
+			name,
+			username
 		}
 
 		const response = apollo.mutate({ mutation, variables })

@@ -14,17 +14,20 @@ export default {
 			.then( res => {
 				if (res && !this.$store.state.users.currentUser) {
 					this.$store.dispatch('loginUserById', res)
-				}
-				if (!this.$store.state.users.currentUserId){
+						.then(_ => {
+							this.$store.dispatch('getAllProjects', this.$store.state.users.currentUserId)
+								.then(res => {
+									if (res && !this.$store.state.projects.firstLoad) this.$store.dispatch('flipFirstLoadFlag')
+								})
+						})
+				} else {
 					this.$store.dispatch('clearLocalStorage')
 				} 
-				if(JSON.parse(localStorage.getItem('learningPath')) && JSON.parse(localStorage.getItem('learningMaterials'))) this.$store.dispatch('setStateFromLocalStorage')
-			})
-		
-		this.$store.dispatch('getNonUserProjects')
-			.then(res => {
-				if (res) this.$store.dispatch('flipNonUserFlag')
-			})
+				if(JSON.parse(localStorage.getItem('learningPath')) && JSON.parse(localStorage.getItem('learningMaterials'))){
+					 this.$store.dispatch('setStateFromLocalStorage')
+				}
+				
+			})		
 	},
 	data () {
 		return {

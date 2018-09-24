@@ -78,8 +78,9 @@
 				}
 				else if(this.learningPath.name) {
 					let userId = this.$store.state.users.currentUserId
+					let username = this.$store.state.users.currentUser
 					let name = this.learningPath.name
-					this.$store.dispatch('saveLearningPath', { userId, name })
+					this.$store.dispatch('saveLearningPath', { userId, name, username })
 					.then(res => {
 						if (res.status.success){
 							this.success = true

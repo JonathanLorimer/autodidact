@@ -74,6 +74,8 @@ const getAllLearningPaths = async () => {
 	let lps = await db.collection('learning-paths').find().toArray()
 	lps = lps.map(e => { 
 		return {
+			userId: e.userId,
+			username: e.username,
 			name: e.name,
 			learningPath: e.input.learningPath,
 			learningMaterials: e.input.learningMaterials
