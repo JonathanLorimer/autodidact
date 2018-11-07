@@ -1,17 +1,19 @@
 	<template>
 		<div class="container">
-			<div class="title">{{ currentUser }}'s Learning Paths</div>
-			<ul class="user-learningpaths">
-				<li
-					class="user-learningpaths__path"
-					v-for="path in userProjects" 
-					:key="path._id"
-				>
-					<div>{{ path.name }}</div>
-					<div class="user-learningpaths__path--materials-count">{{ path.learningMaterials.length}} Materials</div>
-					<div class="user-learningpaths__path--materials-type" v-for="type in getTypes(path.learningMaterials)" :key="type">{{ type }}</div>
-				</li>
+			<div v-if="currentUser">
+				<div class="title">{{ currentUser }}'s Learning Paths</div>
+				<ul class="user-learningpaths">
+					<li
+						class="user-learningpaths__path"
+						v-for="path in userProjects" 
+						:key="path._id"
+					>
+						<div>{{ path.name }}</div>
+						<div class="user-learningpaths__path--materials-count">{{ path.learningMaterials.length}} Materials</div>
+						<div class="user-learningpaths__path--materials-type" v-for="type in getTypes(path.learningMaterials)" :key="type">{{ type }}</div>
+					</li>
 			</ul>
+			</div>
 			<div class="title">Public Learning Paths</div>
 			<ul class="non-user-learningpaths">
 				<li 

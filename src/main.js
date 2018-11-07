@@ -4,8 +4,10 @@ import store from './store/store'
 import router from './router'
 
 // Apollo client side, to be attached to the vue objects to expose apollo methods globally
+// FIXME: Dyanmic imports are in stage 3 ECMA proposal http://2ality.com/2017/01/import-operator.html
+let apollo;
 if (process.env.NODE_ENV !== 'test'){
-  import apollo from './apolloClient'
+  apollo = require('./apolloClient') 
 }
 
 // Components
@@ -25,7 +27,10 @@ import 'es6-promise/auto'
 
 
 Vue.config.productionTip = false
-Vue.prototype.$apollo = apollo
+
+if (process.env.NODE_ENV !== 'test'){
+  Vue.prototype.$apollo = apollo
+}
 
 Vue.component('landing-page', LandingPage)
 Vue.component('header-nav', HeaderNav)

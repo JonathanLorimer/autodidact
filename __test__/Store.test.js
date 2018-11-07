@@ -56,10 +56,6 @@ describe('Testing Users Store Actions', () => {
 	let actionMock
 	let store
 
-	beforeAll(() => {
-		Object.defineProperty(global, 'document', {});
-	})
-
 	beforeEach(() => {
 		mutationMock = jest.fn()
 		actionMock = jest.fn()

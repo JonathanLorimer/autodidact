@@ -1,8 +1,5 @@
 import ApolloClient from 'apollo-boost'
-export let apollo;
-
-if (process.env.NODE_ENV !== 'test'){
-   apollo = new ApolloClient({
-    uri: 'http://localhost:5000/graphql'
-  })
-}
+// FIXME: Come up with better solution than this
+export default process.env.NODE_ENV === 'test' ? null : new ApolloClient({
+  uri: 'http://localhost:5000/graphql'
+})
