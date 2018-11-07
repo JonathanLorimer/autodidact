@@ -7,7 +7,7 @@ const MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 
 // Connection URL
-var url = 'mongodb://localhost:27017/test';
+var url = `mongodb://localhost:27017/${process.env.NODE_ENV}`;
 
 // TODO: add try catches in the async await functions to handle un-anticipated errors
 // Use connect method to connect to the server

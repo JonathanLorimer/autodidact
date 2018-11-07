@@ -5,8 +5,8 @@
 				<ul class="navigation__list">
 					<li class="navigation__item"><router-link class="link" :to="'create'">Create</router-link></li>
 					<li class="navigation__item"><router-link class="link" :to="'view-proj'">View Projects</router-link></li>
-					<li class="navigation__item" v-if="!currentUser"><a class="link" @click="flipLoginSwitch"> Login/Register </a></li>
-					<li class="navigation__item" v-else><a class="link"> {{ currentUser }} </a><a class="link" @click="logout"> Logout </a> </li>
+					<li class="navigation__item" v-if="!currentUser"><a class="link login" @click="flipLoginSwitch"> Login/Register </a></li>
+					<li class="navigation__item" v-else><a class="link user"> {{ currentUser }} </a><a class="link logout" @click="logout"> Logout </a> </li>
 				</ul>
 			</nav>
 		</div>

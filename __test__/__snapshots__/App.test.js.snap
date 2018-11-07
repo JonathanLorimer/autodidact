@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing App.vue, LandingPage.vue, HeaderNav.vue Header Nav: should mount and render correctly (snapshot test) 1`] = `
+<div class="navigation">
+  <nav class="navigation__nav">
+    <div class="navigation__logo">
+      <vuecomponent-stub to="/" class="link"></vuecomponent-stub>
+    </div>
+    <ul class="navigation__list">
+      <li class="navigation__item">
+        <vuecomponent-stub to="create" class="link"></vuecomponent-stub>
+      </li>
+      <li class="navigation__item">
+        <vuecomponent-stub to="view-proj" class="link"></vuecomponent-stub>
+      </li>
+      <li class="navigation__item">
+        <a class="link login"> Login/Register </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+`;
+
+exports[`Testing App.vue, LandingPage.vue, HeaderNav.vue Header Nav: should mount and render correctly when user is logged in (snapshot test) 1`] = `
+<div class="navigation">
+  <nav class="navigation__nav">
+    <div class="navigation__logo">
+      <vuecomponent-stub to="/" class="link"></vuecomponent-stub>
+    </div>
+    <ul class="navigation__list">
+      <li class="navigation__item">
+        <vuecomponent-stub to="create" class="link"></vuecomponent-stub>
+      </li>
+      <li class="navigation__item">
+        <vuecomponent-stub to="view-proj" class="link"></vuecomponent-stub>
+      </li>
+      <li class="navigation__item">
+        <a class="link user"> testUser@hotmail.com </a>
+        <a class="link logout"> Logout </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+`;
+
+exports[`Testing App.vue, LandingPage.vue, HeaderNav.vue Landing Page should mount and render correctly (snapshot test) 1`] = `
+<div class="landing-page">
+  <section class="hero-image">
+    <div class="header">
+      <h1 class="header__text">Autodidact</h1>
+      <p class="header__content">A tool for the self learner to connect and organize their materials</p>
+    </div>
+  </section>
+</div>
+`;

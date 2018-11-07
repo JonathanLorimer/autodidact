@@ -4,7 +4,9 @@ import store from './store/store'
 import router from './router'
 
 // Apollo client side, to be attached to the vue objects to expose apollo methods globally
-import apollo from './apolloClient'
+if (process.env.NODE_ENV !== 'test'){
+  import apollo from './apolloClient'
+}
 
 // Components
 import LandingPage from './components/LandingPage.vue'

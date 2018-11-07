@@ -172,7 +172,6 @@ const actions = {
 		dispatch('clearLocalStorage')
 	},
 	setCookie({ commit }, cookieDetails){
-		console.log()
 		let { name, value, days } = cookieDetails
 		let expires = ""
 		if (days) {
